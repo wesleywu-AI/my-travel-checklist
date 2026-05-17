@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { CHECKLIST_INFO, DEFAULT_CHECKLISTS, SUB_CATEGORIES } from '../constants/checklistData';
