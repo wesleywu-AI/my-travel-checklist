@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 
-const ChecklistItem = ({ item, onToggle, onDelete, onEdit }) => {
+const ChecklistItem = ({ item, color, textColor, onToggle, onDelete, onEdit }) => {
   const handleLongPress = () => {
     Alert.alert(
       '操作选项',
@@ -22,62 +22,101 @@ const ChecklistItem = ({ item, onToggle, onDelete, onEdit }) => {
 
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[styles.container, { width: '48%' }]}
       onPress={() => onToggle(item.id)}
       onLongPress={handleLongPress}
       activeOpacity={0.7}
     >
-      <View style={[styles.checkbox, item.completed && styles.checkboxCompleted]}>
-        {item.completed && <Text style={styles.checkmark}>✓</Text>}
+      <View style={styles.contentContainer}>
+        <TouchableOpacity
+          style={[styles.checkbox, item.completed && { borderColor: color }]}
+          onPress={() => onToggle(item.id)}
+        >
+          {item.completed && (
+            <View style={[styles.checkmark, { backgroundColor: color }]}>
+              <Text style={styles.checkmarkText}>✓</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        <Text
+          style={[
+            styles.text,
+            item.completed && styles.textCompleted,
+          ]}
+          numberOfLines={2}
+        >
+          {item.text}
+        </Text>
       </View>
-      <Text style={[styles.text, item.completed && styles.textCompleted]}>
-        {item.text}
-      </Text>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => onDelete(item.id)}
+      >
+        <Text style={styles.deleteIcon}>×</Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    elevation: 2,
+    borderRadius: 12,
+    padding: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#F3F4F6',
+    marginBottom: 8,
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#CCCCCC',
-    marginRight: 15,
+    borderColor: '#D1D5DB',
+    marginRight: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkboxCompleted: {
-    backgroundColor: '#4ECDC4',
-    borderColor: '#4ECDC4',
-  },
   checkmark: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkmarkText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
   },
   text: {
     flex: 1,
-    fontSize: 16,
-    color: '#333333',
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#374151',
   },
   textCompleted: {
     textDecorationLine: 'line-through',
-    color: '#999999',
+    color: '#9CA3AF',
+  },
+  deleteButton: {
+    padding: 4,
+    marginLeft: 4,
+  },
+  deleteIcon: {
+    fontSize: 16,
+    color: '#D1D5DB',
+    fontWeight: '300',
   },
 });
 

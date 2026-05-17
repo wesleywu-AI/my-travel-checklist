@@ -48,30 +48,43 @@ const HomeScreen = () => {
     return (
       <TouchableOpacity
         key={type}
-        style={[styles.card, { backgroundColor: info.color }]}
+        style={[styles.card, { backgroundColor: info.bgColor }]}
         onPress={() => handleCardPress(type)}
         activeOpacity={0.8}
       >
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardIcon}>{info.icon}</Text>
-          <Text style={styles.cardTitle}>{info.title}</Text>
-        </View>
-        <Text style={styles.cardDescription}>{info.description}</Text>
-        {progress.total > 0 && (
-          <View style={styles.progressContainer}>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { width: `${progress.percentage}%` },
-                ]}
-              />
-            </View>
-            <Text style={styles.progressText}>
-              {progress.completed}/{progress.total} 已完成
-            </Text>
+        <View style={styles.cardContent}>
+          <View style={[styles.iconContainer, { backgroundColor: info.iconBg }]}>
+            <Text style={styles.cardIcon}>{info.icon}</Text>
           </View>
-        )}
+          <View style={styles.cardTextContainer}>
+            <Text style={[styles.cardTitle, { color: info.textColor }]}>
+              {info.title}
+            </Text>
+            <Text style={styles.cardDescription}>{info.description}</Text>
+          </View>
+        </View>
+
+        <View style={styles.progressSection}>
+          {progress.total > 0 ? (
+            <>
+              <Text style={[styles.progressText, { color: info.textColor }]}>
+                {progress.completed}/{progress.total} 已完成
+              </Text>
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    { width: `${progress.percentage}%`, backgroundColor: info.color },
+                  ]}
+                />
+              </View>
+            </>
+          ) : (
+            <View style={styles.emptyTag}>
+              <Text style={styles.emptyTagText}>去创建</Text>
+            </View>
+          )}
+        </View>
       </TouchableOpacity>
     );
   };
@@ -81,9 +94,12 @@ const HomeScreen = () => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <Text style={styles.headerTitle}>出游清单</Text>
-        <Text style={styles.headerSubtitle}>轻松准备每一次出行</Text>
+        <Text style={styles.headerSubtitle}>点击卡片进入对应场景清单</Text>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {Object.values(CHECKLIST_TYPES).map(renderCard)}
       </ScrollView>
     </View>
@@ -93,76 +109,104 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F9FAFB',
   },
   header: {
-    padding: 20,
-    paddingTop: 40,
+    padding: 24,
+    paddingTop: 48,
     backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    marginBottom: 24,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333333',
+    color: '#111827',
+    marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#666666',
-    marginTop: 5,
+    color: '#6B7280',
   },
   scrollContent: {
-    padding: 20,
+    padding: 16,
+    paddingBottom: 32,
   },
   card: {
-    borderRadius: 15,
+    borderRadius: 16,
     padding: 20,
-    marginBottom: 15,
-    elevation: 3,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#F3F4F6',
   },
-  cardHeader: {
+  cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
+  },
+  iconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
   },
   cardIcon: {
-    fontSize: 32,
-    marginRight: 15,
+    fontSize: 28,
+  },
+  cardTextContainer: {
+    flex: 1,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    marginBottom: 4,
   },
   cardDescription: {
     fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.9,
-    marginBottom: 10,
+    color: '#6B7280',
   },
-  progressContainer: {
-    marginTop: 10,
+  progressSection: {
+    marginTop: 8,
+  },
+  progressText: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
   },
   progressBar: {
-    height: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 3,
+    height: 8,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 3,
+    borderRadius: 4,
   },
-  progressText: {
+  emptyTag: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 16,
+  },
+  emptyTagText: {
     fontSize: 12,
-    color: '#FFFFFF',
-    marginTop: 5,
+    color: '#6B7280',
+    fontWeight: '500',
   },
 });
 
